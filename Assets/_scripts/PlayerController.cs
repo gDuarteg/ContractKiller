@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour {
 
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
+        float y = 0;
 
         float mouse_dX = Input.GetAxis("Mouse X");
         float mouse_dY = Input.GetAxis("Mouse Y");
@@ -109,17 +110,30 @@ public class PlayerController : MonoBehaviour {
         moveDirection = transform.TransformDirection(moveDirection);
         moveDirection *= _baseSpeed;
 
-        if (characterController.isGrounded /*|| doubleJump == true*/) {
-            if (Input.GetKeyDown(KeyCode.Space) && _baseSpeed == 10.0f) {
-                //rb.AddForce(new )
-                //moveDirection.y = jumpForce;
-                //doubleJump = false;
-            }
-            else if (Input.GetKeyDown(KeyCode.Space) && _baseSpeed == 20.0f) {
-                moveDirection.y = jumpForce * 2;
-                //doubleJump = false;
-            }
-        }
+        //if (characterController.isGrounded /*|| doubleJump == true*/) {
+        //    if (Input.GetKeyDown(KeyCode.Space) && _baseSpeed == 10.0f) {
+        //        rb.AddForce(new Vector3(0, 5, 0), ForceMode.Impulse);
+        //        //moveDirection.y = jumpForce;
+        //        //doubleJump = false;
+        //    }
+        //    else if (Input.GetKeyDown(KeyCode.Space) && _baseSpeed == 20.0f) {
+        //        moveDirection.y = jumpForce * 2;
+        //        //doubleJump = false;
+        //    }
+        //}
+
+        //if (characterController.isGrounded && y < 0) {
+        //    y = -2f;
+        //}
+
+        //if (Input.GetButtonDown("Jump") && characterController.isGrounded) {
+        //    y = 3f;
+        //}
+        //Vector3 direction = transform.right * x + transform.up * y + transform.forward * z;
+
+        //y -= _gravidade * Time.deltaTime;
+
+        //characterController.Move(direction * _baseSpeed * Time.deltaTime);
 
         if (!characterController.isGrounded) {
             moveDirection.y -= _gravidade;
