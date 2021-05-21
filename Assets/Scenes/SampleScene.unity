@@ -985,10 +985,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2507d6f5a7dc93142b424510740bc085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 10
+  jumpForce: 1.7
   awarenessBar: {fileID: 491969739}
-  Awareness: 5
-  MaxAwareness: 5
-  rb: {fileID: 0}
 --- !u!143 &1399909042
 CharacterController:
   m_ObjectHideFlags: 0
