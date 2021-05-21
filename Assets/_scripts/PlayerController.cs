@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
     public AwarenessBehaviour awarenessBar;
 
     public float Awareness;
-    public float MaxAwareness = 5;
+    public float MaxAwareness = 5.0f;
 
     //bool doubleJump = true;
     //float stamina = 100f;

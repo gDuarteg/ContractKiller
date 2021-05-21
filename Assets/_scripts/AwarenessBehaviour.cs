@@ -1,23 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AwarenessBehaviour : MonoBehaviour {
 
-    public Slider Slider;
+    public Slider awarenessBar;
     public Color Low;
     public Color High;
 
     public void SetAwareness(float awareness, float maxAwareness) {
-        Slider.value = awareness;
-        Slider.maxValue = maxAwareness;
-
-        Slider.fillRect.GetComponentInChildren<Image>().color = Color.Lerp(Low, High, Slider.normalizedValue);
+        Debug.Log(awarenessBar.normalizedValue);
+        awarenessBar.normalizedValue = 1f;
+        awarenessBar.fillRect.GetComponentInChildren<Image>().color = Low;
     }
 
-    // Update is called once per frame
-    void Update() {
-        Slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position);
-    }
 }
