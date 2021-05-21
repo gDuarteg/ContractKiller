@@ -6,6 +6,11 @@ public class PlayerController : MonoBehaviour {
     float _baseSpeed = 10.0f;
     float _gravidade = 9.8f;
     float jumpForce = 300;
+    public AwarenessBehaviour awarenessBar;
+
+    public float Awareness;
+    public float MaxAwareness = 5;
+
     //bool doubleJump = true;
     //float stamina = 100f;
     //float maxStamina = 100f;
@@ -31,7 +36,9 @@ public class PlayerController : MonoBehaviour {
         characterController = GetComponent<CharacterController>();
         playerCamera = GameObject.Find("Main Camera");
         cameraRotation = 0.0f;
-
+        Awareness = MaxAwareness;
+        awarenessBar.SetAwareness(Awareness, MaxAwareness);
+        
         //staminabar.SetStamina(stamina, maxStamina);
     }
 
