@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-
+    GameManager gm;
     CharacterController characterController;
     GameObject playerCamera;
 
@@ -15,7 +15,10 @@ public class PlayerController : MonoBehaviour {
 
     float Awareness, MaxAwareness;
     public AwarenessBehaviour awarenessBar;
+
     private void Start() {
+        gm = GameManager.GetInstance();
+        GameManager.changeStateDelegate += Reset;
         characterController = GetComponent<CharacterController>();
         playerCamera = GameObject.Find("Main Camera");
         cameraRotation = 0.0f;
@@ -23,7 +26,7 @@ public class PlayerController : MonoBehaviour {
         awarenessBar.SetAwareness(Awareness, MaxAwareness);
     }
     public void Reset() {
-        transform.position = new Vector3(0, 2, 0);
+        transform.position = new Vector3(23, -6, -71);
     }
 
     public void Move() {
@@ -42,7 +45,7 @@ public class PlayerController : MonoBehaviour {
             y = jumpForce;
         }
         if ( Input.GetKeyDown(KeyCode.LeftShift) /*&& stamina >= 1*/) {
-            speed = 20.0f;
+            speed = 15.0f;
         }
         if ( Input.GetKeyUp(KeyCode.LeftShift) /*|| stamina <= 1*/) {
             speed = 10.0f;
@@ -65,7 +68,19 @@ public class PlayerController : MonoBehaviour {
         playerCamera.transform.localRotation = Quaternion.Euler(cameraRotation, 0.0f, 0.0f);
     }
 
+    void Hit() {
+        gm.life -= 1;
+    }
+
     void Update() {
+        if (gm.currentState != GameManager.GameState.GAME) {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            gm.changeState(GameManager.GameState.PAUSE);
+            return;
+        }
+
         Move();
     }
 
