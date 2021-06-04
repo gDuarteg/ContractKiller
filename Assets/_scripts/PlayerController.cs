@@ -33,8 +33,8 @@ public class PlayerController : MonoBehaviour {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
         float mouse_dX = Input.GetAxis("Mouse X");
-        float mouse_dY = Input.GetAxis("Mouse Y");
-        Mathf.Clamp(cameraRotation, -75.0f, 75.0f);
+        float mouse_dY = -Input.GetAxis("Mouse Y");
+        Mathf.Clamp(cameraRotation, 75.0f, -75.0f);
         cameraRotation += mouse_dY;
 
         if ( characterController.isGrounded && y < 0 ) {
