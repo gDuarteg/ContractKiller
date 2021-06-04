@@ -112,9 +112,7 @@ public class Atirar : MonoBehaviour {
             //
             RaycastHit pontoDeColisao;
             if (Physics.Raycast(transform.position, transform.forward, out pontoDeColisao)) {
-                Debug.Log("ENCOSTA EM ALGO"+ pontoDeColisao.transform.gameObject.name);
                 if (pontoDeColisao.transform.gameObject.tag == TagInimigo) {
-                    Debug.Log("TIRA VIDA INIMIGO");
                     pontoDeColisao.transform.gameObject.GetComponent<Inimigo>().vida -= armas[armaAtual].danoPorTiro;
                 }
             }

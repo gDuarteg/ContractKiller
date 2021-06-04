@@ -23,10 +23,11 @@ public class PlayerController : MonoBehaviour {
         playerCamera = GameObject.Find("Main Camera");
         cameraRotation = 0.0f;
         Awareness = MaxAwareness;
-        awarenessBar.SetAwareness(Awareness, MaxAwareness);
+        awarenessBar.SetAwareness(Awareness , MaxAwareness);
     }
     public void Reset() {
-        transform.position = new Vector3(23, -6, -71);
+        transform.position = new Vector3(23 , -6 , -71);
+
     }
 
     public void Move() {
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour {
         float z = Input.GetAxis("Vertical");
         float mouse_dX = Input.GetAxis("Mouse X");
         float mouse_dY = -Input.GetAxis("Mouse Y");
-        Mathf.Clamp(cameraRotation, 75.0f, -75.0f);
+        Mathf.Clamp(cameraRotation , 75.0f , -75.0f);
         cameraRotation += mouse_dY;
 
         if ( characterController.isGrounded && y < 0 ) {
@@ -53,19 +54,19 @@ public class PlayerController : MonoBehaviour {
 
         if ( Input.GetKeyDown(KeyCode.LeftControl) ) {
             speed = 5.0f;
-            playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+            playerCamera.transform.position = new Vector3(transform.position.x , transform.position.y - 0.5f , transform.position.z);
         }
         if ( Input.GetKeyUp(KeyCode.LeftControl) ) {
             speed = 10.0f;
-            playerCamera.transform.position = new Vector3(transform.position.x, transform.position.y + 0.69f, transform.position.z);
+            playerCamera.transform.position = new Vector3(transform.position.x , transform.position.y + 0.69f , transform.position.z);
         }
 
         Vector3 direction = transform.right * x + transform.up * y + transform.forward * z;
         y -= _gravidade * Time.deltaTime;
         characterController.Move(direction * speed * Time.deltaTime);
 
-        transform.Rotate(Vector3.up, mouse_dX);
-        playerCamera.transform.localRotation = Quaternion.Euler(cameraRotation, 0.0f, 0.0f);
+        transform.Rotate(Vector3.up , mouse_dX);
+        playerCamera.transform.localRotation = Quaternion.Euler(cameraRotation , 0.0f , 0.0f);
     }
 
     void Hit() {
@@ -73,22 +74,38 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
-        if (gm.currentState != GameManager.GameState.GAME) {
-            return;
+        if ( gm.life <= 0 ) {
+            gm.EndGame();
         }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        if ( gm.currentState != GameManager.GameState.GAME ) {
+            if ( Cursor.lockState == CursorLockMode.Locked ) {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            return;
+        } else {
+            if ( Cursor.lockState != CursorLockMode.Locked ) {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+
+        }
+
+        if ( Input.GetKeyDown(KeyCode.Escape) ) {
             gm.changeState(GameManager.GameState.PAUSE);
             return;
         }
 
         Move();
     }
+    public void onHit() {
+        Debug.Log("MORRE");
+        gm.life -= 1;
+    }
 
     void LateUpdate() {
         RaycastHit hit;
-        Debug.DrawRay(transform.position, playerCamera.transform.forward * 5.0f, Color.magenta);
+        Debug.DrawRay(transform.position , playerCamera.transform.forward * 5.0f , Color.magenta);
 
-        if ( Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 10.0f) ) {
+        if ( Physics.Raycast(playerCamera.transform.position , playerCamera.transform.forward , out hit , 10.0f) ) {
         }
 
     }

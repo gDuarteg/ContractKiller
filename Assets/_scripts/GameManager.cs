@@ -45,7 +45,7 @@ public class GameManager {
         //player.Reset();
     }
     public void EndGame() {
-        if (remainingTime <= 0f) {
+        if (life <= 0f) {
             endGameStatus = EndGameState.LOST;
         }
         else {

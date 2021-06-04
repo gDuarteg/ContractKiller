@@ -8,7 +8,6 @@ public class AwarenessBehaviour : MonoBehaviour {
     public Color High;
 
     public void SetAwareness(float awareness, float maxAwareness) {
-        Debug.Log(awarenessBar.normalizedValue);
         awarenessBar.normalizedValue = 1f;
         awarenessBar.fillRect.GetComponentInChildren<Image>().color = Low;
     }

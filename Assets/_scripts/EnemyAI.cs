@@ -19,11 +19,18 @@ public class EnemyAI : MonoBehaviour {
     public Target target;
     protected float NextState;
 
+    private float shootRateTimeStamp = 0f;
+    public float shootRate = 0f;
+    public float shootForce = 0f;
+
+    public GameObject bullet;
+    public GameObject weapon;
+
     void Awake() {
         Agent = GetComponent<NavMeshAgent>();
         PotentialTargets = FindObjectsOfType<Target>();
         Player = GameObject.Find("Player");
-        target = PotentialTargets[Random.Range(0, PotentialTargets.Length)];
+        target = PotentialTargets[Random.Range(0 , PotentialTargets.Length)];
         Agent.SetDestination(target.transform.position);
         State = StateEnum.RUN;
     }
@@ -35,14 +42,13 @@ public class EnemyAI : MonoBehaviour {
     }
 
     void Update() {
-        if (gm.currentState != GameManager.GameState.GAME) {
+        if ( gm.currentState != GameManager.GameState.GAME ) {
             return;
         }
-        Debug.Log(vida);
-        if (vida <= 0) {
+        if ( vida <= 0 ) {
             vida = 0;
-            if (chamouMorte == false) {
-                chamouMorte = true; 
+            if ( chamouMorte == false ) {
+                chamouMorte = true;
                 DestroyEnemy();
             }
         }
@@ -56,63 +62,67 @@ public class EnemyAI : MonoBehaviour {
         NextState -= Time.deltaTime;
         Vector3 targetDirection = transform.forward;
 
-        switch (State) {
+        switch ( State ) {
             case StateEnum.RUN:
-                animator.SetBool("Run", true);
-                if (Vector3.Distance(Player.transform.position, transform.position) < EnemyView || NextState < 0) {
-                    State = StateEnum.SHOOT;
-                    NextState = Random.Range(2f, 5f);
-                    animator.SetBool("Run", false);
-                }
-                //else {
-                //    transform.position += Agent.desiredVelocity * Time.deltaTime;
-                //}
-                targetDirection = Agent.desiredVelocity;
-                break;
+            animator.SetBool("Run" , true);
+            if ( Vector3.Distance(Player.transform.position , transform.position) < EnemyView || NextState < 0 ) {
+                State = StateEnum.SHOOT;
+                NextState = Random.Range(2f , 5f);
+                animator.SetBool("Run" , false);
+            }
+            //else {
+            //    transform.position += Agent.desiredVelocity * Time.deltaTime;
+            //}
+            targetDirection = Agent.desiredVelocity;
+            break;
 
             case StateEnum.SHOOT:
-                animator.SetBool("Run", false);
-                animator.SetBool("Shoot", true);
-                var look = Player.transform.position - transform.position;
-                Debug.Log(look);
-                //Hit();
-                if (chamouHit == false) {
-                    chamouHit = true;
-                    StartCoroutine("Hit");
-                }
-                targetDirection = look;
-                if (Vector3.Distance(Player.transform.position, transform.position) > EnemyView) {
-                    State = StateEnum.RUN;
-                    var targetIndex = Random.Range(0, PotentialTargets.Length);
-                    //for (var i = 0; i < PotentialTargets.Length && PotentialTargets[targetIndex].Occupied; i++)
-                    //    targetIndex = (targetIndex + 1) % PotentialTargets.Length;
-                    target = PotentialTargets[targetIndex];
-                    //    target.EnemyGoal = this;
-                    Agent.SetDestination(target.transform.position);
+            if ( Time.time > shootRateTimeStamp ) {
+                GameObject go = (GameObject) Instantiate(bullet , weapon.transform.position, weapon.transform.rotation);
+                go.GetComponent<Rigidbody>().AddForce(weapon.transform.right * shootForce);
+                shootRateTimeStamp = Time.time + shootRate;
+            }
+            animator.SetBool("Run" , false);
+            animator.SetBool("Shoot" , true);
+            var look = Player.transform.position - transform.position;
+            //Hit();
+            //if ( chamouHit == false ) {
+            //    chamouHit = true;
+            //    StartCoroutine("Hit");
+            //}
+            targetDirection = look;
+            if ( Vector3.Distance(Player.transform.position , transform.position) > EnemyView ) {
+                State = StateEnum.RUN;
+                var targetIndex = Random.Range(0 , PotentialTargets.Length);
+                //for (var i = 0; i < PotentialTargets.Length && PotentialTargets[targetIndex].Occupied; i++)
+                //    targetIndex = (targetIndex + 1) % PotentialTargets.Length;
+                target = PotentialTargets[targetIndex];
+                //    target.EnemyGoal = this;
+                Agent.SetDestination(target.transform.position);
 
-                    animator.SetBool("Shoot", false);
-                }
-                break;
+                animator.SetBool("Shoot" , false);
+            }
+            break;
         }
 
         transform.position += Agent.desiredVelocity * Time.deltaTime;
         //transform.rotation
 
-        
+
 
         // The step size is equal to speed times frame time.
         float singleStep = 2 * Time.deltaTime;
 
         // Rotate the forward vector towards the target direction by one step
-        Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
+        Vector3 newDirection = Vector3.RotateTowards(transform.forward , targetDirection , singleStep , 0.0f);
 
         // Draw a ray pointing at our target in
-        Debug.DrawRay(transform.position, newDirection, Color.red);
+        Debug.DrawRay(transform.position , newDirection , Color.red);
 
         // Calculate a rotation a step closer to the target and applies rotation to this object
         transform.rotation = Quaternion.LookRotation(newDirection);
 
-        Debug.DrawLine(transform.position + Vector3.up, transform.position + Vector3.up + Agent.desiredVelocity * 10);
+        Debug.DrawLine(transform.position + Vector3.up , transform.position + Vector3.up + Agent.desiredVelocity * 10);
     }
 
     public enum StateEnum {
@@ -122,20 +132,20 @@ public class EnemyAI : MonoBehaviour {
 
     public void TakeDamage(int damage) {
         health -= damage;
-        if (health <= 0) {
+        if ( health <= 0 ) {
             DestroyEnemy();
         }
     }
 
-    IEnumerator Hit() {
-        //GetComponent<MeshRenderer>().material.color = Color.red;
-        yield return new WaitForSeconds(2);
-        gm.life -= 1;
-    }
+    //IEnumerator Hit() {
+    //    //GetComponent<MeshRenderer>().material.color = Color.red;
+    //    yield return new WaitForSeconds(2);
+    //    gm.life -= 1;
+    //}
     private void DestroyEnemy() {
         Destroy(gameObject);
     }
-    //void Hit() {
-    //    gm.life -= 1;
-    //}
+    void Hit() {
+        gm.life -= 1;
+    }
 }
