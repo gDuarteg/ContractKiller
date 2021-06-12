@@ -12,6 +12,7 @@ public class buttons : MonoBehaviour
 
     public void PlayGame() {
         gm.changeState(GameManager.GameState.GAME);
+        gm.life = 40;
     }
 
     public void GoToOptions() {
@@ -22,8 +23,9 @@ public class buttons : MonoBehaviour
         gm.changeState(GameManager.GameState.TUTORIAL);
     }
 
-    public void PauseGame() {
-        gm.changeState(GameManager.GameState.PAUSE);
+    public void UnPauseGame() {
+        Time.timeScale = 1;
+        gm.changeState(GameManager.GameState.GAME);
     }
 
     public void GoToMainMenu() {

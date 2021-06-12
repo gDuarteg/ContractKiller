@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_End : MonoBehaviour
-{
-    Text textComp;
+public class UI_End : MonoBehaviour {
+    public Text textComp;
     GameManager gm;
 
     // Start is called before the first frame update
     void Start() {
-        textComp = GetComponent<Text>();
+        //textComp = GetComponent<Text>();
         gm = GameManager.GetInstance();
     }
 

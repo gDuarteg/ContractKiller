@@ -34,7 +34,7 @@ public class Arma919 {
 }
 [RequireComponent(typeof(AudioSource))]
 public class Atirar : MonoBehaviour {
-
+    GameManager gm;
     public KeyCode botaoRecarregar = KeyCode.R;
     public int armaInicial = 0;
     public string TagInimigo = "inimigo";
@@ -49,6 +49,8 @@ public class Atirar : MonoBehaviour {
     GameObject luzColisao;
 
     void Start() {
+        gm = GameManager.GetInstance();
+
         //laser das armas
         luzColisao = new GameObject();
         luzColisao.AddComponent<Light>();
@@ -81,6 +83,8 @@ public class Atirar : MonoBehaviour {
     }
 
     void Update() {
+        if (gm.currentState != GameManager.GameState.GAME) return;
+
         //UI
         BalasExtra.text = "BalasExtra: " + armas[armaAtual].balasExtra;
         BalasPente.text = "BalasNoPente: " + armas[armaAtual].balasNoPente;
